@@ -32,6 +32,15 @@
         android:text="AÇ (Wi-Fi + Ethernet aç)"
         android:textSize="24sp" />
 
+    <Button
+        android:id="@+id/btnSsh"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:focusable="true"
+        android:text="SSH AÇ / KAPAT (root)"
+        android:textSize="24sp" />
+
     <TextView
         android:id="@+id/txtDurum"
         android:layout_width="wrap_content"
