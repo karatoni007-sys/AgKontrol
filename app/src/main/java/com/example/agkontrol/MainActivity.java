@@ -16,13 +16,14 @@ public class MainActivity extends Activity {
     // Cihazınızda arayüz adları farklıysa burayı değiştirin (root yöntemi için).
     private static final String WIFI = "wlan0";
     private static final String ETHERNET = "eth0";
-    // Termux'un sshd'sini root olarak başlatan komut (Termux portu: 8022).
-    private static final String TERMUX_BIN = "/data/data/com.termux/files/usr/bin";
+    // sshd'yi Termux'un kendi servisi başlatır (root olarak değil). Port: 8022.
+    // Termux'ta "allow-external-apps=true" ayarı açık olmalı.
     private static final String SSHD_KOMUT =
-            "export PATH=" + TERMUX_BIN + ":$PATH; "
-            + "export LD_LIBRARY_PATH=/data/data/com.termux/files/usr/lib; "
-            + "export HOME=/data/data/com.termux/files/home; "
-            + TERMUX_BIN + "/sshd";
+            "am start-foreground-service --user 0 "
+            + "-n com.termux/com.termux.app.RunCommandService "
+            + "-a com.termux.RUN_COMMAND "
+            + "--es com.termux.RUN_COMMAND_PATH /data/data/com.termux/files/usr/bin/sshd "
+            + "--ez com.termux.RUN_COMMAND_BACKGROUND true";
     private static final int VPN_ISTEK = 100;
 
     private TextView txtDurum;
@@ -104,7 +105,7 @@ public class MainActivity extends Activity {
                         yaz("SSH kapatıldı");
                     } else {
                         root(SSHD_KOMUT);
-                        Thread.sleep(1000);
+                        Thread.sleep(2500);
                         if (root("pidof sshd") == 0) {
                             yaz("SSH açıldı (port 8022)");
                         } else {
